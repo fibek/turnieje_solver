@@ -10,7 +10,10 @@ import pandas as pd
 def writeFile(ans_map, taskfile):
     with open(taskfile, 'r+') as f:
         lines = f.readlines()
-        lines[4] = lines[4].strip()+ans_map+"\n"
+        for i in range(0, len(lines)):
+            if lines[i].startswith("map<string,string> M;"):
+                lines[i+1] = lines[i+1].strip()+ans_map+"\n"
+                break
         f.seek(0)
         for line in lines:
             f.write(line)
@@ -68,8 +71,6 @@ for i in range(1, num_of_tasks):
     while True:
         task = driver.find_element(By.XPATH, xpath)
         status = send_task(driver,task)
-        if status == "OK": break
+        if status == "OK" or status == "Błąd kompilacji": break
         time.sleep(10)
-    print("done")
-    time.sleep(10000)
-    # driver.quit()
+    time.sleep(10)
